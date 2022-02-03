@@ -1,0 +1,36 @@
+# Compose fileのバージョン指定
+version: '3'
+
+# どんなコンテナを立ち上げるか
+services:
+ app:
+   ports:
+     - "80:80"
+   build: ./docker/app
+   container_name: task_app
+   volumes:
+     - ./src:/var/www/html
+   restart: always
+
+ db:
+   image: mysql:8
+   container_name: laravel_db
+
+   # コンテナ内の環境変数を指定。環境変数を渡すとビルド時に設定してくれるDockerイメージがあるので、利用の際はDocker Hubのサイトで確認する
+   environment:
+     MYSQL_ROOT_PASSWORD: root
+     MYSQL_DATABASE: laravel_db
+     MYSQL_USER: user
+     MYSQL_PASSWORD: pass
+     TZ: 'Asia/Tokyo'
+
+   # 起動時のコマンド
+   command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+   
+   volumes:
+     - ./docker/db/data:/var/lib/mysql
+     - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+   ports:
+     - 3306:3306
+   restart: always
+     

@@ -1,2 +1,1 @@
-# task-app
-ToDoリスト
+ToDoリストのリポジトリ
